@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+<main>
+    <section class="container-fluid">
+        <div class="container col-xxl-8 px-4 py-5 d-flex justify-content-center">
+            <div class="col-12 col-md-9">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4 class="fw-bold my-2">Edit User Permissions</h4>
+                        <div class="text-center fs-6"><b> {{object.name}} </b>
+                            {% if object.is_superuser %}
+                                <span class="badge bg-primary">Superuser</span>
+                            {% endif %}
+                            {% if object.is_staff %}
+                                <span class="badge bg-primary">Staff</span>
+                            {% endif %}
+                         </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{form|crispy }}
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Edit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

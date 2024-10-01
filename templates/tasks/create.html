@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+{% block title %}Create Task{% endblock %}
+{% block content %}
+<main>
+    <section class="container-fluid">
+        <div class="container px-4 py-5 d-flex flex-column flex-md-row justify-content-center gap-4">
+            <div class="col-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="fw-bold my-2 text-center">Create Task</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{form|crispy }}
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="card">
+                    <div class="card-header text-bg-info">
+                        <h4 class="fw-bold my-2 text-center">Task Runner Info</h4>
+                    </div>
+                    <div class="card-body">
+                        {% for selector,task in TASK_TYPES.items %}
+                            <div id="{{selector}}" class="task-data d-none">
+                                <h1 class="fs-5"> Task Runner Name </h1>
+                                <div class="mb-2"> {{task.name}} </div>
+                                <h1 class="fs-5"> Task Runner Description </h1>
+                                <div class="mb-2"> {{task.help_text}} </div>
+                                <h1 class="fs-5"> Needed Connections </h1>
+                                <div class="mb-2"> {{task.needed_connections}} </div>
+                                <h1 class="fs-5"> Needed Arguments </h1>
+                                <div class="mb-2"> 
+                                    {% for arg in task.needed_arguments %}
+                                        <span class="badge text-bg-info me-1" style="font-size: 15px;">{{arg}}</span>
+                                    {% empty %}
+                                        No Arguments Needed
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<script>
+    document.getElementById("id_type").addEventListener("change", function(){
+        var taskType = this.value;
+        var taskTables = document.querySelectorAll(".task-data");
+        taskTables.forEach(function(table){
+            table.classList.add("d-none");
+        });
+        document.getElementById(taskType).classList.remove("d-none");
+    });
+    document.getElementById("RECONNAISSANCE").classList.remove("d-none");
+</script>
+{% endblock %}

@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% load helpers %}
+
+{% block content %}
+{% if request.GET.ran %}
+<script>
+    setTimeout(() => {
+        window.location.href = "{% url 'task_detail' object.id %}";
+    }, 5000);
+</script>
+{% endif %}
+<main class="p-4">
+    <section class="row g-3">
+        <div class="col-12">
+            <div class="mb-3 mx-3">
+                <div class="hstack justify-content-between">
+                    <div class="vstack">
+                        <h2 class="mb-0">
+                            {{ object.name }}
+                        </h2>
+                        <p>
+                            Type: {{ object.type|title }} <br>
+                            Created By: {{ object.created_by }}
+                        </p>
+                    </div>
+                    <div class="vstack align-items-end gap-3">
+                            <span class="badge text-bg-primary">{{ object.created_at|date:"F d, Y" }}</span>
+                            <div>
+                                <a href="{% url 'history_create' object.id %}" class="btn btn-success me-2 {% if request.GET.ran %}disabled{% endif %}">
+                                    {% if request.GET.ran %}
+                                    <svg width="24px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path class="st0" d="M329.364,237.908l42.558-39.905c25.236-23.661,39.552-56.701,39.552-91.292V49.156 c0.009-13.514-5.53-25.918-14.402-34.754C388.235,5.529,375.833-0.009,362.318,0H149.681c-13.514-0.009-25.926,5.529-34.763,14.401 c-8.871,8.837-14.41,21.24-14.392,34.754v57.554c0,34.591,14.315,67.632,39.552,91.292l42.55,39.888 c2.342,2.205,3.678,5.271,3.678,8.492v19.234c0,3.221-1.336,6.279-3.669,8.476l-42.558,39.905 c-25.237,23.652-39.552,56.701-39.552,91.292v57.554c-0.018,13.515,5.522,25.918,14.392,34.755 c8.838,8.871,21.249,14.41,34.763,14.401h212.636c13.515,0.009,25.918-5.53,34.755-14.401c8.871-8.838,14.41-21.24,14.402-34.755 V405.29c0-34.591-14.316-67.64-39.552-91.292l-42.55-39.897c-2.352-2.205-3.678-5.263-3.678-8.484v-19.234 C325.694,243.162,327.021,240.096,329.364,237.908z M373.946,462.844c-0.009,3.273-1.274,6.056-3.411,8.218 c-2.162,2.136-4.944,3.402-8.218,3.41H149.681c-3.273-0.009-6.064-1.274-8.226-3.41c-2.136-2.162-3.393-4.945-3.402-8.218V405.29 c0-24.212,10.026-47.356,27.691-63.91l42.55-39.906c9.914-9.285,15.539-22.273,15.539-35.857v-19.234 c0-13.592-5.625-26.58-15.547-35.866l-42.542-39.896c-17.666-16.554-27.691-39.69-27.691-63.91V49.156 c0.009-3.273,1.266-6.055,3.402-8.226c2.162-2.127,4.953-3.394,8.226-3.402h212.636c3.273,0.008,6.056,1.274,8.218,3.402 c2.136,2.171,3.402,4.952,3.411,8.226v57.554c0,24.22-10.026,47.356-27.692,63.91l-42.55,39.896 c-9.914,9.286-15.538,22.274-15.538,35.866v19.234c0,13.584,5.625,26.572,15.547,35.874l42.541,39.88 c17.666,16.563,27.692,39.707,27.692,63.919V462.844z"></path> <path class="st0" d="M237.261,378.95l-77.33,77.33h192.128l-77.33-77.33C264.385,368.614,247.615,368.614,237.261,378.95z"></path> </g> </g></svg>
+                                    Task added to queue
+                                    {% else %}
+                                    <svg width="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21.4086 9.35258C23.5305 10.5065 23.5305 13.4935 21.4086 14.6474L8.59662 21.6145C6.53435 22.736 4 21.2763 4 18.9671L4 5.0329C4 2.72368 6.53435 1.26402 8.59661 2.38548L21.4086 9.35258Z" fill="currentColor"></path> </g></svg>
+                                    Run task
+                                    {% endif %}
+                                </a>
+                                {% if request.user == object.created_by %}
+                                    <a href="{% url 'task_edit' object.id %}" class="btn btn-primary me-2">
+                                        <svg width="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                        Edit task
+                                    </a>
+                                    <a href="{% url 'task_delete' object.id %}" class="btn btn-danger">
+                                        <svg width="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 11V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M14 11V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M6 7H12H18V18C18 19.6569 16.6569 21 15 21H9C7.34315 21 6 19.6569 6 18V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                        Delete task
+                                    </a>
+                                {% endif %}
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column flex-md-row align-items-stretch justify-content-evenly gap-3">
+                <div class="container p-0">
+                    <div class="card mb-3">
+                        <h2 class="card-header text-center">
+                            Task Details
+                        </h2>
+                        <div class="card-body hstack">
+                            <div class="w-100">
+                                <table class="w-75 table table-borderless table-sm">
+                                    <tbody>
+                                        <tr>
+                                            <td>Recurrence Interval</td>
+                                            {% if object.recurrence_interval == 0 %}
+                                                <td>No recurrence</td>
+                                            {% else %}
+                                                <td>{% widthratio object.recurrence_interval 3600 1 %} hours</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            <td>Start Time</td>
+                                            <td>{{ object.run_at|date:"h:i A"}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="w-100" > 
+                                <ul class="list-group text-center">
+                                    <li class="list-group-item list-group-item-primary fw-semibold fs-5">
+                                        Connections Used
+                                    </li>
+                                    {% for connection in object.connections.all %}
+                                        <li class="list-group-item">
+                                            {{ connection.name }}
+                                        </li>
+                                    {% empty%}
+                                        <li class="list-group-item">
+                                            No connections added
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header hstack justify-content-between">
+                            <h2 class="text-center my-2">
+                                Task Arguments
+                            </h2>
+                            {% if perms.app.add_taskhistory and object.created_by == user  %}
+                                <a href="{% url 'argument_create' object.id %}" class="btn btn-primary">
+                                    <svg width="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 12H18M12 6V18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                    Add new argument
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            {% for arg in object.arguments.all %}
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">{{arg.name}}</span>
+                                    <input type="text" class="form-control" value="{{arg.value}}" disabled readonly>
+                                    <a href="{% url 'argument_edit' object.id arg.id %}" class="btn btn-outline-primary" type="button">Edit</a>
+                                    <a href="{% url 'argument_delete' object.id arg.id %}" class="btn btn-outline-danger" type="button">Delete</a>
+                                </div>
+                            {% empty%}
+                                <div class="text-center mb-2">
+                                    No arguments found
+                                </div>
+                            {% endfor %}
+                            <ul class="list-group text-center">
+                                <li class="list-group-item  list-group-item-primary fw-semibold fs-5">
+                                    Arguments Needed
+                                </li>
+                                {% for arg in object.get_arguments_needed %}
+                                    <li class="list-group-item">
+                                        {{ arg }}
+                                    </li>
+                                {% empty%}
+                                    <li class="list-group-item">
+                                        No arguments needed
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="container p-0">
+                    <div class="card mb-3">
+                        <h2 class="card-header text-center">
+                            Action Logs
+                        </h2>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                {% for log in logs %}
+                                    <li class="list-group-item">
+                                        <div class="hstack justify-content-between">
+                                            <div>
+                                                {{ log.user }}
+                                                {% if log.is_addition %}
+                                                added
+                                                {% elif log.is_change %}
+                                                changed
+                                                {% elif log.is_deletion %}
+                                                deleted
+                                                {% endif %}
+                                                object 
+                                                {{ log.object_repr }}
+                                            </div>
+                                            <span class="badge text-bg-primary">
+                                                {{ log.action_time }}   
+                                            </span>
+                                        </div>
+                                    </li>
+                                {% empty%}
+                                     <li class="list-group-item text-center">
+                                        No logs found  
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2 class="card-header text-center">
+                            Task History
+                        </h2>
+                        <div class="card-body px-0">
+                            <div class="container p-0 table-responsive">
+                                <table class="table">
+                                    <thead class="header table-active">
+                                        <tr>
+                                            <th scope="col">Started At</th>
+                                            <th scope="col">Ended At</th>
+                                            <th scope="col">Run Type</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for history in object.history.all %}
+                                            <tr>
+                                                <td>{{ history.started_at }}</td>
+                                                <td>
+                                                    {% if history.ended_at %}
+                                                        {{ history.ended_at }}
+                                                    {% else %}
+                                                        Running
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ history.run_type }}</td>
+                                                <td class="ps-4">
+                                                    {% if history.status == "SUCCESS" %}
+                                                        <svg class="text-success" width="25" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm5.676,8.237-6,5.5a1,1,0,0,1-1.383-.03l-3-3a1,1,0,1,1,1.414-1.414l2.323,2.323,5.294-4.853a1,1,0,1,1,1.352,1.474Z"></path></g></svg>
+                                                    {% elif history.status == "RUNNING" %}
+                                                        <div class="ms-1 spinner-border spinner-border-sm text-info" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                    {% else %}
+                                                        <svg class="text-danger" width="25" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="cross-circle" class="icon glyph"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm3.71,12.29a1,1,0,0,1,0,1.42,1,1,0,0,1-1.42,0L12,13.42,9.71,15.71a1,1,0,0,1-1.42,0,1,1,0,0,1,0-1.42L10.58,12,8.29,9.71A1,1,0,0,1,9.71,8.29L12,10.58l2.29-2.29a1,1,0,0,1,1.42,1.42L13.42,12Z"></path></g></svg>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'history_detail' object.id history.id %}" class="text-decoration-none" >
+                                                        <svg width="20"class="mb-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9ZM11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M21.83 11.2807C19.542 7.15186 15.8122 5 12 5C8.18777 5 4.45796 7.15186 2.17003 11.2807C1.94637 11.6844 1.94361 12.1821 2.16029 12.5876C4.41183 16.8013 8.1628 19 12 19C15.8372 19 19.5882 16.8013 21.8397 12.5876C22.0564 12.1821 22.0536 11.6844 21.83 11.2807ZM12 17C9.06097 17 6.04052 15.3724 4.09173 11.9487C6.06862 8.59614 9.07319 7 12 7C14.9268 7 17.9314 8.59614 19.9083 11.9487C17.9595 15.3724 14.939 17 12 17Z" fill="currentColor"></path> </g></svg>
+                                                        View
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% empty %}
+                                            <tr>
+                                                <td colspan="5" class="text-center" >No tasks found</td>
+                                            </tr>   
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+</main>
+{% endblock %}

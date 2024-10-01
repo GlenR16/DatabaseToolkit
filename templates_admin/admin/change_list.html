@@ -1,0 +1,98 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_list %}
+
+<script src="{% static 'admin/js/filters.js' %}" defer></script>
+<script>
+(function($) {
+    $(document).ready(function() {
+        var filters = new SelectFilter();
+        filters.init();
+    });
+})(django.jQuery);
+</script>
+{% if not is_popup %}
+{% block breadcrumbs %}
+<ol class="breadcrumb my-0">
+  <li class="breadcrumb-item">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'admin:app_list' app_label=cl.opts.app_label %}">{{ cl.opts.app_config.verbose_name }}</a>
+  </li>
+  <li class="breadcrumb-item active">{{ cl.opts.verbose_name_plural|capfirst }}</li>
+</ol>
+{% endblock %}
+{% endif %}
+{% block content_title %}
+{% endblock %}
+{% block content %}
+  <div class="container border border-2 rounded p-0">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center p-3">
+      <div class="hstack gap-2 align-items-end">
+          <h2 class="text-center mb-0">
+              {% if title %}
+                {{ title }}
+              {% else %}
+                {{ cl.opts.verbose_name_plural|capfirst }}
+              {% endif %}
+          </h2>
+      </div>
+      {% block object-tools %}
+            {% block object-tools-items %}
+              {% change_list_object_tools %}
+            {% endblock %}
+      {% endblock %}
+    </div>
+    {% if cl.formset and cl.formset.errors %}
+        <p class="errornote">
+        {% blocktranslate count counter=cl.formset.total_error_count %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktranslate %}
+        </p>
+        {{ cl.formset.non_form_errors }}
+    {% endif %}
+    <div class="module{% if cl.has_filters %} filtered{% endif %}" id="changelist">
+      <div class="changelist-form-container">
+        {% block search %}{% search_form cl %}{% endblock %}
+        {% block date_hierarchy %}{% if cl.date_hierarchy %}{% date_hierarchy cl %}{% endif %}{% endblock %}
+
+        <form id="changelist-form" method="post"{% if cl.formset and cl.formset.is_multipart %} enctype="multipart/form-data"{% endif %} novalidate>{% csrf_token %}
+        {% if cl.formset %}
+          <div>{{ cl.formset.management_form }}</div>
+        {% endif %}
+
+        {% block result_list %}
+          {% if action_form and actions_on_top and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+          {% result_list cl %}
+          {% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+        {% endblock %}
+        {% block pagination %}{% pagination cl %}{% endblock %}
+        </form>
+      </div>
+      {% block filters %}
+        {% if cl.has_filters %}
+          <nav id="changelist-filter" class="vstack gap-2 px-3 py-2 border-top border-2" aria-labelledby="changelist-filter-header">
+            <div class="hstack gap-2 justify-content-between">
+              <h1 id="changelist-filter-header">{% translate 'Filters' %}</h1>
+              {% if cl.is_facets_optional or cl.has_active_filters %}
+                <div id="changelist-filter-extra-actions" class="btn-group" >
+                  {% if cl.is_facets_optional %}
+                      {% if cl.add_facets %}<a href="{{ cl.remove_facet_link }}" class="btn btn-secondary">{% translate "Hide counts" %}</a>
+                      {% else %}<a href="{{ cl.add_facet_link }}" class="btn btn-secondary">{% translate "Show counts" %}</a>{% endif %}
+                  {% endif %}
+                  {% if cl.has_active_filters %}
+                    <a href="{{ cl.clear_all_filters_qs }}" class="btn btn-danger"> {% translate "Clear all filters" %}</a>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+            <div class="hstack gap-2 justify-content-between">
+              {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
+            </div>
+          </nav>
+        {% endif %}
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block nav_sidebar %}
+{% endblock %}

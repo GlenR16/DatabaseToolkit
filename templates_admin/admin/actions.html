@@ -1,0 +1,38 @@
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+<div class="">
+  {% block actions %}
+    <div class="hstack align-items-center justify-content-between gap-2 p-3 border-top border-bottom border-2">
+      <div class="hstack gap-2 align-items-end mb-3">
+        <h2 class="text-center mb-0" >
+          {% translate "Batch Actions" %}
+        </h2>
+        {% block actions-counter %}
+        <div class="mb-1 fw-light">
+          {% if actions_selection_counter %}
+            {% if cl.result_count != cl.result_list|length %}
+            <span class="all hidden">{{ selection_note_all }}</span>
+            <span class="question hidden">
+                <a href="#" title="{% translate 'Click here to select the objects across all pages' %}">{% blocktranslate with cl.result_count as total_count %}Select all {{ total_count }} {{ module_name }}{% endblocktranslate %}</a>
+            </span>
+            <span class="clear hidden"><a href="#">{% translate "Clear selection" %}</a></span>
+            {% endif %}
+          {% endif %}
+        </div>
+        {% endblock %}
+      </div>
+      <div class="hstack align-items-end justify-content-end gap-2">
+      {% block actions-form %}
+        <div class="hstack gap-2">
+          {{action_form|crispy}}
+        </div>
+      {% endblock %}
+      {% block actions-submit %}
+        <button type="submit" class="btn btn-secondary mb-3" title="{% translate 'Run the selected action' %}" name="index" value="{{ action_index|default:0 }}">{% translate "Go" %}</button>
+      {% endblock %}
+      </div>
+    </div>
+    
+  {% endblock %}
+</div>

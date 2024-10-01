@@ -1,0 +1,53 @@
+{% load i18n %}
+
+{% if app_list %}
+    <div class="border rounded overflow-hidden">
+        <table class="table mb-0">
+          <tbody>
+          {% for app in app_list %}
+            <tr class="header table-active">
+              <th scope="col" colspan="2" class="fs-5 text-center" >
+                {{ app.name }} Section
+              </th>
+            </tr>
+            {% for model in app.models %} 
+              {% with model_name=model.object_name|lower %}
+                <tr class="">
+                    <th scope="row" class="fs-5">
+                        {% if model.admin_url %}
+                          <a href="{{ model.admin_url }}" class="text-decoration-none" {% if model.admin_url in request.path|urlencode %} aria-current="page" {% endif %}>{{ model.name }}</a>
+                        {% else %} 
+                          {{ model.name }} 
+                        {% endif %}
+                    </th>
+                    <td>
+                      <div class="hstack gap-1 align-items-center justify-content-end" >
+                        {% if model.add_url %}
+                            <a href="{{ model.add_url }}" class="text-decoration-none vstack align-items-center justify-content-center" aria-describedby="{{ app.app_label }}-{{ model_name }}">
+                              <svg width="28px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 12H18M12 6V18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                            </a>
+                        {% else %}
+                        {% endif %} 
+                        {% if model.admin_url and show_changelinks %} 
+                          {% if model.view_only %}
+                            <a href="{{ model.admin_url }}" class="text-decoration-none vstack align-items-center justify-content-center" aria-describedby="{{ app.app_label }}-{{ model_name }}">
+                              <svg width="28px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9ZM11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M21.83 11.2807C19.542 7.15186 15.8122 5 12 5C8.18777 5 4.45796 7.15186 2.17003 11.2807C1.94637 11.6844 1.94361 12.1821 2.16029 12.5876C4.41183 16.8013 8.1628 19 12 19C15.8372 19 19.5882 16.8013 21.8397 12.5876C22.0564 12.1821 22.0536 11.6844 21.83 11.2807ZM12 17C9.06097 17 6.04052 15.3724 4.09173 11.9487C6.06862 8.59614 9.07319 7 12 7C14.9268 7 17.9314 8.59614 19.9083 11.9487C17.9595 15.3724 14.939 17 12 17Z" fill="currentColor"></path> </g></svg>
+                            </a>
+                          {% else %}
+                            <a href="{{ model.admin_url }}" class="text-decoration-none vstack align-items-center justify-content-center" aria-describedby="{{ app.app_label }}-{{ model_name }}">
+                              <svg width="28px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 6.00067L21 6.00139M8 12.0007L21 12.0015M8 18.0007L21 18.0015M3.5 6H3.51M3.5 12H3.51M3.5 18H3.51M4 6C4 6.27614 3.77614 6.5 3.5 6.5C3.22386 6.5 3 6.27614 3 6C3 5.72386 3.22386 5.5 3.5 5.5C3.77614 5.5 4 5.72386 4 6ZM4 12C4 12.2761 3.77614 12.5 3.5 12.5C3.22386 12.5 3 12.2761 3 12C3 11.7239 3.22386 11.5 3.5 11.5C3.77614 11.5 4 11.7239 4 12ZM4 18C4 18.2761 3.77614 18.5 3.5 18.5C3.22386 18.5 3 18.2761 3 18C3 17.7239 3.22386 17.5 3.5 17.5C3.77614 17.5 4 17.7239 4 18Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                            </a>
+                          {% endif %}
+                        {% endif %}
+                      </div>
+                    </td>
+                </tr>
+              {% endwith %}
+            {% endfor %}
+          {% endfor %}
+          </tbody>
+        </table>
+    </div>
+{% else %}
+  <p>{% translate 'You don’t have permission to view or edit anything.' %}</p>
+{% endif %}

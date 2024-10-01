@@ -1,0 +1,19 @@
+{% load i18n %}
+<div class="vstack gap-2">
+  <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#{{ title|cut:' ' }}collapse" aria-expanded="false" aria-controls="{{ title|cut:' ' }}collapse">
+    {% blocktranslate with filter_title=title %} By {{ filter_title }} {% endblocktranslate %}
+  </button>
+  <div class="collapse" id="{{ title|cut:' ' }}collapse">
+    <ul class="list-group">
+    {% for choice in choices %}
+        <a href="{{ choice.query_string|iriencode }}" class="list-group-item {% if choice.selected %}active{% endif %}">
+          {% if "-" in choice.display %}
+            None
+          {% else %}
+            {{ choice.display }}
+          {% endif %}
+        </a>
+    {% endfor %}
+    </ul>
+  </div>
+</div>

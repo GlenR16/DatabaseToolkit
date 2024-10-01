@@ -1,0 +1,24 @@
+$primary: #6374ae;
+$secondary: #7E52A0;
+$success: #4cad3a;
+$info: #17a2b8;
+$warning: #ffc107;
+$danger: #dc3545;
+// light mode
+$light: #ffffff;
+$body-color: #000000;
+$body-emphasis-color:#000000;
+// text color
+$body-bg: #fdf2f6;
+$body-secondary-bg: #fde6ee;
+$body-tertiary-bg: #fdcedf;
+// dark mode
+$dark: #000000;
+$body-color-dark: #ffffff;
+$body-emphasis-color-dark:  #ffffff;
+// text color
+$body-bg-dark: #101820;
+$body-secondary-bg-dark: #222831;
+$body-tertiary-bg-dark:#31363F;
+
+@import './bootstrap/bootstrap.scss';

@@ -1,0 +1,48 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+    <div class="col-sm-12 col-md-6">
+        {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+    </div>
+    <div class="col-sm-12 col-md-6">
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-secondary">
+                <h5 class="my-1">{% translate 'My actions' %}</h5>
+            </li>
+            {% load log %}
+            {% get_admin_log 10 as admin_log for_user user %}
+            {% if not admin_log %}
+                <li class="list-group-item">
+                    <p>{% translate 'None available' %}</p>
+                </li>
+            {% else %}
+                    {% for entry in admin_log %}
+                        <li class="list-group-item">
+                            <div class="hstack justify-content-between">
+                                <div>
+                                    {{ entry.user }} 
+                                    {% if entry.is_addition %}
+                                    added 
+                                    {% elif entry.is_change %}
+                                    changed
+                                    {% else %}
+                                    deleted
+                                    {% endif %}
+                                    {% if entry.is_deletion or not entry.get_admin_url %}
+                                        {{ entry.object_repr }}
+                                    {% else %}
+                                        <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                                    {% endif %}
+                                    at 
+                                    {{ entry.action_time|date:"SHORT_DATETIME_FORMAT" }}
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}
+

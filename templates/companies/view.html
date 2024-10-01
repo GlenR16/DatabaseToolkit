@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+{% load helpers %}
+{% block title %}{{ object.name }}{% endblock %}
+{% block content %}
+<main class="p-5">
+    <section class="row g-3">
+        <div class="col-12">
+            <div class="mb-3 mx-3">
+                <div class="hstack justify-content-between mb-3 mx-3">
+                    <div class="vstack">
+                        <h2 class="card-title">
+                            {{ object.name }}
+                            <p class="card-text fs-6">
+                                Manager: {{ object.manager }}
+                            </p>
+                        </h2>
+                    </div>
+                    <div class="vstack align-items-end gap-3">
+                        <div class="d-grid gap-2" >
+                            <span class="badge text-bg-primary">{{ object.created_at|date:"F d, Y" }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="border border-2 rounded mb-3">
+                        <div class="container-fluid d-flex flex-column flex-md-row justify-content-between align-items-center p-3 border-bottom border-2">
+                            <div class="hstack gap-2 align-items-end">
+                                <h2 class="text-center mb-0">
+                                    Company Users
+                                </h2>
+                                <div class="mb-1 fw-light" >
+                                    Showing {{ object.users.count }} 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid p-0 table-responsive">
+                            <table class="table">
+                                <thead class="header table-active">
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Total Permissions</th>
+                                        <th scope="col">Is Active Account</th>
+                                        <th scope="col">Created At</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in object.users.all %}
+                                        <tr>
+                                            <td>{{ user.name }}</td>
+                                            <td>{{ user.email }}</td>
+                                            <td>{{ user.get_all_permissions|length }}</td>
+                                            <td>
+                                                {% if user.is_active %}
+                                                    <span class="ms-4 badge bg-success">Active</span>
+                                                {% else %}
+                                                    <span class="ms-4 badge bg-danger">Inactive</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ user.created_at }}</td>
+                                            <td>
+                                                <a href="{% url 'company_user_permission_edit' company.id user.id %}" class="ms-3" >
+                                                    <svg width="30" fill="currentColor" viewBox="0 -4.5 46 46" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="_31.ID-Horizontal" data-name="31.ID-Horizontal" d="M43,42H5a4,4,0,0,1-4-4V17a4,4,0,0,1,4-4H20V9a4,4,0,0,1,8,0v4H43a4,4,0,0,1,4,4V38A4,4,0,0,1,43,42ZM17.014,34.488v0S17,33.711,17,33.711a11.22,11.22,0,0,0,2.031-1.378,3.029,3.029,0,0,0,.741-1.362,33.627,33.627,0,0,0,.238-3.7c0-2.062-1.033-4.28-4.007-4.28v0c-2.974,0-4.007,2.219-4.007,4.28a33.874,33.874,0,0,0,.238,3.7,3.029,3.029,0,0,0,.741,1.362A11.219,11.219,0,0,0,15,33.71s-.014.781-.018.781v0s.029,1.146.029,1.487a2.186,2.186,0,0,1-2.223,2.018h0c-2.593.113-3.2.976-3.21.984A4.877,4.877,0,0,0,9,40H23a4.657,4.657,0,0,0-.582-1.022c0-.009-.617-.871-3.21-.984h0a2.186,2.186,0,0,1-2.223-2.018C16.984,35.634,17.014,34.488,17.014,34.488ZM26,9a2,2,0,0,0-4,0v6a2,2,0,0,0,4,0Zm19,8a2,2,0,0,0-2-2H28a4,4,0,0,1-8,0H5a2,2,0,0,0-2,2V38a2,2,0,0,0,2,2H6.8a10.841,10.841,0,0,1,1.16-2.24c.025-.014.848-1.739,5-1.79.006-.021.01-1.042.022-1.027a7.286,7.286,0,0,1-1.051-.816,4.187,4.187,0,0,1-1.452-2.583,39.458,39.458,0,0,1-.488-4.166c0-3.171,1.265-6.381,5.953-6.381h.121c4.688,0,5.953,3.21,5.953,6.381a39.458,39.458,0,0,1-.488,4.166,4.187,4.187,0,0,1-1.452,2.583,7.111,7.111,0,0,1-1.051.816c.013-.015.017,1.007.022,1.027,4.151.051,4.974,1.776,5,1.79A10.841,10.841,0,0,1,25.2,40H43a2,2,0,0,0,2-2Zm-5,9H28a1,1,0,0,1,0-2H40a1,1,0,0,1,0,2ZM28,30h2a1,1,0,0,1,0,2H28a1,1,0,0,1,0-2Zm0,4h6a1,1,0,0,1,0,2H28a1,1,0,0,1,0-2Zm4-3a1,1,0,0,1,1-1h4a1,1,0,0,1,0,2H33A1,1,0,0,1,32,31ZM23,9h2v2H23Z" transform="translate(-1 -5)" fill-rule="evenodd"></path> </g></svg>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="5" class="text-center" >No users found</td>
+                                        </tr>   
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="border border-2 rounded mb-3">
+                        <div class="container-fluid d-flex flex-column flex-md-row justify-content-between align-items-center p-3 border-bottom border-2">
+                            <div class="hstack gap-2 align-items-end">
+                                <h2 class="text-center mb-0">
+                                    Company Logs
+                                </h2>
+                                <div class="mb-1 fw-light" >
+                                    Showing {{ logs.count }} 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid p-0 table-responsive">
+                            <table class="table">
+                                <thead class="header table-active">
+                                    <tr>
+                                        <th scope="col">User</th>
+                                        <th scope="col">Action</th>
+                                        <th scope="col">Associated Object</th>
+                                        <th scope="col">Done At</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for log in logs %}
+                                        <tr>
+                                            <td>{{ log.user }}</td>
+                                            <td>{{ log }}</td>
+                                            <td>{{ log.content_type.model }}</td>
+                                            <td>{{ log.action_time }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="5" class="text-center" >No logs found</td>
+                                        </tr>   
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

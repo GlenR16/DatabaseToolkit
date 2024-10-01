@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+{% block title %}Create Argument{% endblock %}
+{% block content %}
+<main>
+    <section class="container-fluid">
+        <div class="container col-xxl-8 px-4 py-5 d-flex justify-content-center">
+            <div class="col-12 col-md-9">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="fw-bold my-2 text-center">Create Argument</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{form|crispy }}
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
